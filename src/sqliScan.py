@@ -4,8 +4,8 @@
 #
 
 
-""" 
-Cyber Warrior Ar-Ge Training adına geliştirmiş hedef 
+"""
+Cyber Warrior Ar-Ge Training adına geliştirmiş hedef
 site ve sunucudaki sitelerde SQL Injection açığı
 arama aracı.
 """
@@ -19,19 +19,19 @@ __mail__    = "blackvkng@yandex.com"
 import urllib2
 
 sql_errors = {
-			 "error in your SQL syntax": 'SQL syntax error',
-			 "Query failed": 'Query failed',
-			 "supplied argument is not a valid MySQL result resource in": 'Bad argument',
-			 "Microsoft JET Database Engine error '80040e14'": 'JET DBE error',
-			 "Error:unknown": 'Unknown error',
-			 "Fatal error": 'Fatal error',
-			 "mysql_fetch": 'MySQL fetch',
-			 "Syntax error": 'Syntax error'
+			 'SQL syntax error': "error in your SQL syntax",
+			 'Query failed': "Query failed",
+			 'Bad argument': "supplied argument is not a valid MySQL result resource in",
+			 'JET DBE error': "Microsoft JET Database Engine error '80040e14'",
+			 'Unknown error': "Error:unknown",
+			 'Fatal error': "Fatal error",
+			 'MySQL fetch': "mysql_fetch",
+			 'Syntax error': "Syntax error"
 			}
 
 def run(url):
 	global source
-	
+
 	source = ""
 
 	try:
@@ -42,10 +42,8 @@ def run(url):
 	except:
 		pass
 
-	for error in sql_errors:
+	for error in sql_errors.values():
 		if error in source:
 			return True
-		else: 
-			pass
 
 	return False
