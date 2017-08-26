@@ -114,6 +114,7 @@ class viSQL:
                     self.vprint('Connection error', 'red', 'err')
 
         self.vprint("Program shutting down", "yellow", "info")
+		
 if __name__ == '__main__':
     init(autoreset=True)
 
