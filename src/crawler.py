@@ -3,59 +3,45 @@
 #
 #
 
-
-""" 
-Cyber Warrior Ar-Ge Training adına geliştirmiş hedef 
-site ve sunucudaki sitelerde SQL Injection açığı
-arama aracı.
-"""
-
 __author__  = "Black Viking"
-__version__ = "0.0.1"
+__version__ = "0.0.4"
 
 __date__    = "07.06.2017"
 __mail__    = "blackvkng@yandex.com"
 
+import gethtml
+
 import re
-import requests
 import urlparse
 
+class Crawler:
+    def __init__(self):
+        self.sites = []
 
-def parameterControl(url):
-	
-    for site in sites:
-        if url.split("=")[0] in site:
-            return False
+    def parameterControl(self, URL):   	
+        for site in self.sites:
+            if URL.split("=")[0] in site:
+                return False
 
-    return True
+        return True
 
-def run(startUrl):
+    def crawl(self, startURL):
+        try:
+            source, URL = gethtml.open(startURL)
+        except:
+            return "connection error"
 
-    global sites
+        self.sites = []
+        baseURL    = 'http://' + '/'.join(URL.split('/')[2:-1]) + '/'
+        
+        for link in re.findall('<a href="(.*?)"', source):
+            for _ in ['.php?', '.asp?', '.aspx?', '.jsp?']:
+                if _ in link:
+                    if link not in self.sites:
+                        if self.parameterControl(link) == True:
+                            if baseURL not in link:
+                                self.sites.append(baseURL + link.lstrip("/"))                        	
+                            else:
+                        	    self.sites.append(link)
 
-    sites = []
-    
-    try:
-        html = requests.get(startUrl, timeout=3)
-    except:
-        return "Connection error!"
-
-    test = html.url.split("/")
-    if len(test) >= 4:
-    	baseUrl = 'http://' + '/'.join(test[2:-1]) + '/'
-    else:
-    	baseUrl = html.url.rstrip("/") + "/"
-    
-    for url in re.findall('<a href="(.*?)"', html.text):
-        if ".php?" in url:
-            if url != "/":
-                if url not in sites:
-                    if parameterControl(url):
-                        if baseUrl not in url:
-                            url = baseUrl + url.lstrip("/")
-                            sites.append(url)
-                    	
-                        else:
-                    	    sites.append(url)
-
-    return sites
+        return self.sites
