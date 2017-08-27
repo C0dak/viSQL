@@ -32,8 +32,9 @@ class Crawler:
             return "connection error"
 
         self.sites = []
-        baseURL    = 'http://' + '/'.join(URL.split('/')[2:-1]) + '/'
-        
+
+        baseURL = 'http://' + '/'.join(URL.split('/')[2:-1]) + '/' if len(URL.split('/')) >= 4 else URL.rstrip('/') + '/'
+
         for link in re.findall('<a href="(.*?)"', source):
             for _ in ['.php?', '.asp?', '.aspx?', '.jsp?']:
                 if _ in link:
