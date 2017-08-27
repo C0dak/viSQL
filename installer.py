@@ -6,29 +6,28 @@
 __author__ = "Black Viking"
 
 import os
-import pip
 
-content = """
+content = """\
 #!/bin/bash
 
 cd /usr/share/visql
-python2 viSQL.py "$@"
-"""
+python2 viSQL.py "$@" """
 
 def main():
 	if os.name != "nt":
 		if os.getuid() == 0:
+			if os.path.exists('/usr/share/visql') == True:
+				os.system('rm -rf /usr/share/visql /usr/bin/visql')
+
 			os.system("git clone http://github.com/blackvkng/viSQL.git /usr/share/visql")
-			for i in ["requests", "colorama"]:
-				pip.main(["install", i])
-			
+
 			file = open("/usr/bin/visql", "w")
 			file.write(content)
 			file.close()
 			
 			os.system("chmod +x /usr/bin/visql")
 
-			print "\n\n[+] Installation finished, type 'visql' to use program!"
+			print "\n[+] Installation finished, type 'visql' to use program!"
 		else:
 			print "Run as root!"
 	else:
