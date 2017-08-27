@@ -40,7 +40,7 @@ class Crawler:
                 if _ in link:
                     if link not in self.sites:
                         if self.parameterControl(link) == True:
-                            if baseURL not in link:
+                            if baseURL.split('/')[2] not in link:
                                 self.sites.append(baseURL + link.lstrip("/"))                        	
                             else:
                         	    self.sites.append(link)
