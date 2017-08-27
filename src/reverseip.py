@@ -25,4 +25,11 @@ def find(URL):
     except:
         return 'connection error'
     
-    return [_[0] for _ in source['domainArray']]
+    domains = [_[0] for _ in source['domainArray']]
+
+    for _ in domains:
+    	if 'www.' in _:
+    		if _.replace('www.', '') in domains:
+    			domains.remove(_)
+
+    return domains
