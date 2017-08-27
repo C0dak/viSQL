@@ -9,18 +9,20 @@ __version__ = "0.0.4"
 __date__    = "07.06.2017"
 __mail__    = "blackvkng@yandex.com"
 
-import gethtml
-
-import re
+import json
+import urllib
 import urllib2
 import urlparse
+
+import useragent
 
 def find(URL):
     base = urlparse.urlparse(URL).path if urlparse.urlparse(URL).netloc == '' else urlparse.urlparse(URL).netloc
 
     try:
-        source, URL = gethtml.open("http://viewdns.info/reverseip/?host=%s&t=1"%(base))
+        request = urllib2.Request('http://domains.yougetsignal.com/domains.php', data=urllib.urlencode({'remoteAddress': base}), headers=useragent.randomHeader())
+        source  = json.loads(urllib2.urlopen(request, timeout=5).read())
     except:
-        return "connection error"
-	
-    return re.findall("<td>(.*?)</td>", source)[3:]
+        return 'connection error'
+    
+    return [_[0] for _ in source['domainArray']]
